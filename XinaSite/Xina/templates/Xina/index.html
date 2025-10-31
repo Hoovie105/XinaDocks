@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuFlow</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .animate-fade-up {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+    </style>
+</head>
+<body>
+    <nav class="navbar animate-fade-in">
+        <div class="logo">
+            <span class="logo-icon">📄</span>
+            DocuFlow
+        </div>
+        <button class="sign-in">Sign In</button>
+    </nav>
+
+    <main class="hero">
+        <h1 class="animate-fade-up">Document Your Business<br>The Modern Way</h1>
+        <p class="animate-fade-up delay-1">Secure, organized, and collaborative documentation platform designed for<br>growing businesses</p>
+        <button class="get-started animate-fade-up delay-2">Get Started →</button>
+    </main>
+
+    <div class="features">
+        <div class="feature-card animate-fade-up delay-2">
+            <div class="feature-icon secure">🔒</div>
+            <h3>Secure & Private</h3>
+            <p>Multi-tenant architecture ensures your documentation stays completely isolated and secure</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-3">
+            <div class="feature-icon role">👥</div>
+            <h3>Role-Based Access</h3>
+            <p>Control who can view, edit, or manage documentation with granular permissions</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-4">
+            <div class="feature-icon fast">⚡</div>
+            <h3>Fast & Efficient</h3>
+            <p>Built with modern technology for lightning-fast performance and seamless experience</p>
+        </div>
+    </div>
+</body>
+</html>
