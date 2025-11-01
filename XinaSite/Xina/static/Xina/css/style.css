@@ -31,8 +31,8 @@ body {
     align-items: center;
     gap: 0.5rem;
     font-size: 1.25rem;
-    font-weight: 600;
-    color: #4052ef;
+    font-weight: 700;
+    color: #000000;
 }
 
 .logo-icon {
@@ -41,15 +41,17 @@ body {
     justify-content: center;
     background-color: #4052ef;
     color: white;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
     font-size: 1.2rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding-left: 5px;
 }
 
 .sign-in {
-    padding: 0.5rem 1.25rem;
-    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
     background-color: white;
     border: 1px solid #e0e0e0;
     color: #333;
@@ -88,10 +90,10 @@ body {
 }
 
 .get-started {
-    padding: 0.8rem 2rem;
-    border-radius: 6px;
+    padding: 0.6rem 2rem;
+    border-radius: 10px;
     border: none;
-    background-color: #4052ef;
+    background-color: #3042e5;
     color: white;
     font-weight: 500;
     cursor: pointer;
@@ -124,8 +126,7 @@ body {
     padding: 2rem;
     background: white;
     border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.04),
-                0 4px 12px rgba(0,0,0,0.03);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.119);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -143,12 +144,26 @@ body {
     padding: 10px;
     border-radius: 12px;
     margin: 0 auto 1rem;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+
 }
 
 .secure { background-color: #4052ef; }
 .role { background-color: #00b8d4; }
 .fast { background-color: #4052ef; }
+
+.logo-icon-feature {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon-feature img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
 
 .feature-card h3 {
     margin-bottom: 0.5rem;
@@ -160,6 +175,7 @@ body {
     font-size: 0.9rem;
     line-height: 1.5;
 }
+
  /* Animations */
 @-webkit-keyframes fadeInUp {
     from {
@@ -241,4 +257,47 @@ body {
 .delay-4 { 
     -webkit-animation-delay: 0.8s;
     animation-delay: 0.8s;
+}
+
+/* CTA Section Styles */
+.cta-section {
+    text-align: center;
+    padding: 2.5rem 1rem;
+}
+
+.cta-section p {
+    margin-bottom: 1.5rem;
+    color: #6e6e6e;
+}
+
+.create-account {
+    padding: 0.7rem 2rem;
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.create-account:hover {
+    background-color: #f8f9fe;
+    border-color: #4052ef;
+    color: #4052ef;
+}
+
+.footer-note {
+    margin-top: 10rem;
+    color: #3e3e3e;
+    font-size: 0.875rem;
+}
+
+.footer-note hr {
+    border: none;
+    justify-content: center;
+    border-top: 1px solid #e0e0e0;
+    margin-bottom: 1rem;
+    margin: 0 auto 1rem auto;
+    width: 1300px;
 }
