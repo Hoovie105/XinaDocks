@@ -27,6 +27,7 @@
     <!-- Sign In Form -->
     <form id="sign-in-form" method="POST" action="{% url 'xina:login' %}" {% if sign_up_active %}style="display:none;"{% else %}style="display:block;"{% endif %}>
       {% csrf_token %}
+      
       <label for="username">Username</label>
       <input type="username" id="username" name="username" placeholder="username" required />
 

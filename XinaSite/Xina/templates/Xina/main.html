@@ -1,3 +1,43 @@
-{% if request.user.is_authenticated %}
-<p>MAIN MAIN MAIN</p>
-{% endif %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>XinaDocks — All Documents</title>
+
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'Xina/css/style3.css' %}">
+</head>
+<body>
+  {% include "Nav.html" %}
+  <main class="page-main">
+    {% block content %}
+    <div class="page-inner">
+      <h1 class="page-title">All Documents</h1>
+      <p class="page-sub">Browse and manage your team's documentation</p>
+
+      <section class="empty-state">
+        <div class="empty-card">
+          <div class="empty-card-inner">
+            <div class="empty-icon">
+              <img src="{% static 'Xina/images/pngegg.png' %}" alt="No documents">
+            </div>
+            <h2 class="empty-title">No documents yet</h2>
+            <p class="empty-desc">Create your first document to get started</p>
+
+            <div class="create-row">
+              <button class="btn create-main">
+                <img class="btn-icon" src="{% static 'Xina/images/create-plus.svg' %}" alt="">
+                <span onclick="location.href='{% url 'xina:Create' %}'">Create Document</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    {% endblock content %}
+  </main>
+</body>
+</html>

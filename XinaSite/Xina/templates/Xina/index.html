@@ -20,7 +20,7 @@
     <main class="hero">
         <h1 class="animate-fade-up">Document Your Business<br>The Modern Way</h1>
         <p class="animate-fade-up delay-1">Secure, organized, and collaborative documentation platform designed for<br>growing businesses</p>
-        <button class="get-started animate-fade-up delay-2">Get Started →</button>
+        <button class="get-started animate-fade-up delay-2" onclick="location.href='{% url 'xina:login' %}'">Get Started →</button>
     </main>
 
     <div class="features">
@@ -35,7 +35,7 @@
             <div class="feature-icon role logo-icon-feature">
                 <img src="{% static "Xina/images/advisors-6491207_1920.png" %}" alt="People">
             </div>
-            <h3>Role-Based Access</h3>
+            <h3>User-Based Access</h3>
             <p>Control who can view, edit, or manage documentation with granular permissions</p>
         </div>
         <div class="feature-card animate-fade-up delay-4">
@@ -49,7 +49,7 @@
 
     <section class="cta-section animate-fade-up delay-4">
         <p>Ready to streamline your documentation?</p>
-        <button class="create-account">Create Your Account</button>
+        <button class="create-account" onclick="location.href='{% url 'xina:login' %}'">Create Your Account</button>
         <div class="footer-note">
             <hr>
             <small>© 2025 XinaDocks.</small>

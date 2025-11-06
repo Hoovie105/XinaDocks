@@ -1,0 +1,176 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title></title>
+  <link rel="stylesheet" href="{% static 'Xina/css/style4.css' %}" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+{% include "Nav.html" %}
+<body>
+{% block content %}
+  <main class="create-page">
+    <div class="create-inner">
+      <a class="back-link" href="{% url 'xina:main' %}">« Back to Documents</a>
+
+      <div class="create-card">
+        <h1 class="create-title">Create New Document</h1>
+
+        <form id="createForm" class="doc-form" action="#" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <label class="field-label" for="title">Document Title</label>
+          <input id="title" name="title" class="field-input" placeholder="Enter document title..." autocomplete="off">
+
+          <label class="field-label" for="content">Content</label>
+          <div class="editor-wrap">
+            <textarea id="content" name="content" class="editor-textarea" placeholder="Write your document content..."></textarea>
+          </div>
+
+          <div class="attachments-row">
+            <div class="attachments-left">
+              <label class="field-label">Attachments</label>
+
+              <div id="dropZone" class="drop-zone">
+                <input id="fileInput" name="files" type="file" multiple accept="image/*,.pdf,.png,.jpg,.jpeg,.doc,.docx,.txt" />
+                <div class="drop-inner">
+                  <img src="{% static 'Xina/images/single-cloud-icon-by-Vexels.svg' %}" alt="Upload" class="upload-illustration">
+                  <p class="drop-text">Drag & drop files here, or <span class="browse">browse</span></p>
+                  <p class="drop-sub">Supports images, PDFs, DOCX, TXT — multiple files</p>
+                </div>
+              </div>
+
+              <div id="fileList" class="file-list" aria-live="polite"></div>
+            </div>
+
+            <div class="attachments-right">
+              <!-- Small helper / tips card on the right to match screenshot balance -->
+              <div class="tips-card">
+                <h3>Upload tips</h3>
+                <ul>
+                  <li>Multiple files supported</li>
+                  <li>Images show thumbnails</li>
+                  <li>PDFs and docs show icons</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <a class="btn btn-ghost" href="#">Cancel</a>
+            <button class="btn btn-primary" id="submitBtn" type="submit">Create Document</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // File upload + preview script
+    (function(){
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const fileList = document.getElementById('fileList');
+
+      function humanFileSize(size){
+        const i = size==0?0:Math.floor(Math.log(size)/Math.log(1024));
+        return (size/Math.pow(1024,i)).toFixed( (i?1:0) ) * 1 + [' B',' KB',' MB',' GB'][i];
+      }
+
+      function renderFiles(files){
+        fileList.innerHTML = '';
+        const list = Array.from(files);
+        list.forEach((file, idx)=>{
+          const item = document.createElement('div');
+          item.className = 'file-item';
+
+          const preview = document.createElement('div');
+          preview.className = 'file-preview';
+
+          const info = document.createElement('div');
+          info.className = 'file-info';
+
+          const name = document.createElement('div');
+          name.className = 'file-name';
+          name.textContent = file.name;
+
+          const meta = document.createElement('div');
+          meta.className = 'file-meta';
+          meta.textContent = humanFileSize(file.size);
+
+          // image preview
+          if(file.type.startsWith('image/')){
+            const img = document.createElement('img');
+            img.className = 'thumb';
+            const reader = new FileReader();
+            reader.onload = e => img.src = e.target.result;
+            reader.readAsDataURL(file);
+            preview.appendChild(img);
+          } else if(file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')){
+            const icon = document.createElement('div');
+            icon.className = 'file-icon pdf';
+            icon.textContent = 'PDF';
+            preview.appendChild(icon);
+          } else {
+            const icon = document.createElement('div');
+            icon.className = 'file-icon';
+            icon.textContent = file.name.split('.').pop().toUpperCase();
+            preview.appendChild(icon);
+          }
+
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'file-remove';
+          removeBtn.type = 'button';
+          removeBtn.innerHTML = '\u2715';
+          removeBtn.addEventListener('click', ()=>{
+            // remove file from FileList — we create a new DataTransfer
+            const dt = new DataTransfer();
+            list.forEach((f, i)=>{ if(i!==idx) dt.items.add(f); });
+            fileInput.files = dt.files;
+            renderFiles(dt.files);
+          });
+
+          info.appendChild(name);
+          info.appendChild(meta);
+
+          item.appendChild(preview);
+          item.appendChild(info);
+          item.appendChild(removeBtn);
+
+          fileList.appendChild(item);
+        });
+      }
+
+      // click on dropzone opens file chooser
+      dropZone.addEventListener('click', ()=> fileInput.click());
+
+      fileInput.addEventListener('change', ()=> renderFiles(fileInput.files));
+
+      dropZone.addEventListener('dragover', (e)=>{
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+      dropZone.addEventListener('dragleave', ()=> dropZone.classList.remove('dragover'));
+
+      dropZone.addEventListener('drop', (e)=>{
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const dt = e.dataTransfer;
+        if(!dt) return;
+        const files = dt.files;
+        // merge existing files
+        const existing = Array.from(fileInput.files || []);
+        const merged = new DataTransfer();
+        existing.forEach(f=> merged.items.add(f));
+        Array.from(files).forEach(f=> merged.items.add(f));
+        fileInput.files = merged.files;
+        renderFiles(fileInput.files);
+      });
+
+    })();
+  </script>
+{% endblock content %}
+</body>
+</html>

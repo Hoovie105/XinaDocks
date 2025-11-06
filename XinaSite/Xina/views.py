@@ -4,9 +4,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+# TOD0: fix log out.
+# 6- add animations (last)
+
 @login_required(login_url='xina:login')
 def mainPage(request):
     return render(request, 'Xina/main.html')
+
+@login_required(login_url='xina:login')
+def Create(request):
+    return render(request, 'Xina/Create.html')
 
 def index(request):
     return render(request, 'Xina/index.html') 
@@ -24,7 +31,6 @@ def LoginPage(request):
 
         # Login successful
         login(request, user)
-        messages.success(request, f"Welcome back, {user.username}!")
         return redirect('xina:main')
 
     # GET request: render login form
