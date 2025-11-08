@@ -35,3 +35,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('searchInput');
+  const documentList = document.getElementById('documentList');
+  const docs = Array.from(documentList.getElementsByClassName('doc-item'));
+
+  searchInput.addEventListener('input', function() {  
+    const query = this.value.toLowerCase();
+    docs.forEach(doc => {
+      const title = doc.querySelector('.doc-title').textContent.toLowerCase();
+      const content = doc.querySelector('.doc-content').textContent.toLowerCase();
+      // Show if title OR content includes the search query
+      doc.style.display = (title.includes(query) || content.includes(query)) ? '' : 'none';
+    });
+  });
+});

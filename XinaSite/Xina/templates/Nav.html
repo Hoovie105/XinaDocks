@@ -10,14 +10,15 @@
             </div>
           <span class="brand-text">XinaDocks</span>
         </Div>
-
+          {% if not is_create_view %}
         <div class="search-wrap" aria-hidden="false">
           <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M21 21l-4.35-4.35" stroke="#9CA3AF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             <circle cx="11" cy="11" r="6" stroke="#9CA3AF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <input class="search-input" type="search" placeholder="Search documents..." aria-label="Search documents">
+          <input id="searchInput" class="search-input" type="search" placeholder="Search documents..." aria-label="Search documents">
         </div>
+        {% endif %}
       </div>
 
       <nav class="nav-actions">
@@ -36,15 +37,18 @@
           <img class="btn-icon" src="{% static 'Xina/images/create-plus.svg' %}" alt="">
           <span onclick="location.href='{% url 'xina:Create' %}'">Create Doc</span>
         </button>
-
-        <a class="nav-link" href="#">
+        
+        <form method="post" action="{% url 'xina:logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="nav-link logout-btn">
           <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
             <span>Sign Out</span>
-        </a>
+          </button>
+        </form>  
       </nav>
     </div>
   </header>

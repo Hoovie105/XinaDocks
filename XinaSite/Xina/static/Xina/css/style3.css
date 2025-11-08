@@ -120,6 +120,13 @@ body{
   font-weight:600;
   padding:6px 8px;
   font-size:15px;
+  display:inline;
+}
+.logout-btn {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 .nav-link.active{
   color:var(--text);

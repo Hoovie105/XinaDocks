@@ -9,6 +9,7 @@
   <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'Xina/css/style3.css' %}">
+  <script src="{% static 'Xina/js/animations.js' %}" defer></script>
 </head>
 <body>
   {% include "Nav.html" %}
@@ -18,24 +19,55 @@
       <h1 class="page-title">All Documents</h1>
       <p class="page-sub">Browse and manage your team's documentation</p>
 
-      <section class="empty-state">
-        <div class="empty-card">
-          <div class="empty-card-inner">
-            <div class="empty-icon">
-              <img src="{% static 'Xina/images/pngegg.png' %}" alt="No documents">
-            </div>
-            <h2 class="empty-title">No documents yet</h2>
-            <p class="empty-desc">Create your first document to get started</p>
+      {% if documents %}
+  <section class="docs-list" id="documentList">
+  {% for doc in documents %}
+    <div class="doc-card doc-item">
+      <h2 class="doc-title">
+        <a href="{% url 'xina:read' doc.id %}">{{ doc.title }}</a>
+      </h2>
+      <p class="doc-meta">
+        Created on {{ doc.created_at|date:"M d, Y" }}
+        <span class="doc-author"> • by {{ doc.created_by.username }}</span>
+      </p>
+      <p class="doc-content">{{ doc.content|truncatechars:200 }}</p>
 
-            <div class="create-row">
-              <button class="btn create-main">
-                <img class="btn-icon" src="{% static 'Xina/images/create-plus.svg' %}" alt="">
-                <span onclick="location.href='{% url 'xina:Create' %}'">Create Document</span>
-              </button>
-            </div>
+      {% with attachment_count=doc.attachments.count %}
+        {% if attachment_count > 0 %}
+          <div class="attachments">
+            <h4>Attachments:</h4>
+            <p>
+              <svg class="file-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                <polyline points="13 2 13 9 20 9"></polyline>
+              </svg>
+              {{ attachment_count }} file{{ attachment_count|pluralize }} attached.
+            </p>
           </div>
+        {% endif %}
+      {% endwith %}
+    </div>
+  {% endfor %}
+</section>
+{% else %}
+  <section class="empty-state">
+    <div class="empty-card">
+      <div class="empty-card-inner">
+        <div class="empty-icon">
+          <img src="{% static 'Xina/images/pngegg.png' %}" alt="No documents">
         </div>
-      </section>
+        <h2 class="empty-title">No documents yet</h2>
+        <p class="empty-desc">Create your first document to get started</p>
+        <div class="create-row">
+          <button class="btn create-main">
+            <img class="btn-icon" src="{% static 'Xina/images/create-plus.svg' %}" alt="">
+            <span onclick="location.href='{% url 'xina:Create' %}'">Create Document</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}
     </div>
     {% endblock content %}
   </main>

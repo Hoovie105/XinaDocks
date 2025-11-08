@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title></title>
+  <title>{% if update_mode %}Update Document{% else %}Create Document{% endif %}</title>
   <link rel="stylesheet" href="{% static 'Xina/css/style4.css' %}" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -16,17 +16,20 @@
       <a class="back-link" href="{% url 'xina:main' %}">« Back to Documents</a>
 
       <div class="create-card">
-        <h1 class="create-title">Create New Document</h1>
+        <h1 class="create-title">{% if update_mode %}Update Document{% else %}Create New Document{% endif %}</h1>
 
-        <form id="createForm" class="doc-form" action="#" method="post" enctype="multipart/form-data">
+        <form id="createForm" class="doc-form"
+              action="{% if update_mode %}{% url 'xina:update' doc.id %}{% else %}{% url 'xina:Create' %}{% endif %}" 
+              method="post" enctype="multipart/form-data">
           {% csrf_token %}
 
           <label class="field-label" for="title">Document Title</label>
-          <input id="title" name="title" class="field-input" placeholder="Enter document title..." autocomplete="off">
+          <input id="title" name="title" class="field-input" placeholder="Enter document title..." autocomplete="off"
+                 value="{% if update_mode %}{{ doc.title }}{% endif %}">
 
           <label class="field-label" for="content">Content</label>
           <div class="editor-wrap">
-            <textarea id="content" name="content" class="editor-textarea" placeholder="Write your document content..."></textarea>
+            <textarea id="content" name="content" class="editor-textarea" placeholder="Write your document content...">{% if update_mode %}{{ doc.content }}{% endif %}</textarea>
           </div>
 
           <div class="attachments-row">
@@ -41,12 +44,18 @@
                   <p class="drop-sub">Supports images, PDFs, DOCX, TXT — multiple files</p>
                 </div>
               </div>
+               {% if not update_mode %}
+              <div id="fileList" class="file-list" aria-live="polite">
+              </div>
+              {% endif %}
+              {% if update_mode and attachments %}
+              <div id="fileList" class="file-list" aria-live="polite">
+              </div>
+              {% endif %}
 
-              <div id="fileList" class="file-list" aria-live="polite"></div>
             </div>
 
             <div class="attachments-right">
-              <!-- Small helper / tips card on the right to match screenshot balance -->
               <div class="tips-card">
                 <h3>Upload tips</h3>
                 <ul>
@@ -59,8 +68,8 @@
           </div>
 
           <div class="form-actions">
-            <a class="btn btn-ghost" href="#">Cancel</a>
-            <button class="btn btn-primary" id="submitBtn" type="submit">Create Document</button>
+            <a class="btn btn-ghost" href="{% url 'xina:main' %}">Cancel</a>
+            <button class="btn btn-primary" id="submitBtn" type="submit">{% if update_mode %}Update Document{% else %}Create Document{% endif %}</button>
           </div>
         </form>
       </div>
@@ -142,10 +151,11 @@
           fileList.appendChild(item);
         });
       }
-
-      // click on dropzone opens file chooser
-      dropZone.addEventListener('click', ()=> fileInput.click());
-
+      dropZone.addEventListener('click', (e)=>{
+        if (e.target.id !== 'fileInput') { 
+          fileInput.click();
+        }
+      });
       fileInput.addEventListener('change', ()=> renderFiles(fileInput.files));
 
       dropZone.addEventListener('dragover', (e)=>{
