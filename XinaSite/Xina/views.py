@@ -7,8 +7,10 @@ from .models import Document, Attachment
 from .forms import DocumentForm 
 
 # TOD0:
-# 6- add animations (last)
-# add styling to CRUD pages/formating (Last)
+# weird update logic for attachments on the frontend, need to fix it later.
+# weird shifting on main page while searching, need to fix it later.
+# Maybe add search animation?
+# date and time is not accurate
 
 @login_required(login_url='xina:login')
 def mainPage(request):
@@ -70,21 +72,12 @@ def update(request, doc_id):
         if not title:
             messages.error(request, "Title cannot be empty.")
             return redirect('xina:update', doc_id=doc.id)
-
         doc.title = title
         doc.content = content
         doc.save()
-
-        # 2. Handle Deletion of Existing Attachments (if implemented in template)
         delete_file_ids = request.POST.getlist('delete_files')
         if delete_file_ids:
-            # Assuming 'Attachment' is your model name
             Attachment.objects.filter(id__in=delete_file_ids).delete()
-            # Note: Deleting the Attachment object typically handles deleting the file 
-            # from storage if you use the signal method, but check your model's implementation.
-
-        # 3. Handle Addition of NEW Attachments (THE MISSING LOGIC)
-        # request.FILES.getlist('files') retrieves all newly uploaded files
         for file in request.FILES.getlist('files'):
             Attachment.objects.create(document=doc, file=file)
 

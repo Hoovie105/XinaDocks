@@ -1,50 +1,67 @@
 {% extends 'Xina/main.html' %}
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'Xina/css/Style5.css' %}">
+<div class="doc-footer">
+  <a href="{% url 'xina:main' %}" class="back-link">« Back to Documents</a>
+</div>
+<div class="doc-container">
+  <div class="doc-header">
+    <h1 class="doc-title">{{ doc.title }}</h1>
+    <div class="doc-meta">
+      <p><strong>Created by:</strong> {{ doc.created_by.username }}</p>
+      <p><strong>Created on:</strong> {{ doc.created_at|date:"M d, Y" }}</p>
+    </div>
+  </div>
 
-<h2>{{ doc.title }}</h2>
-<p><strong>Created by:</strong> {{ doc.created_by.username }}</p>
-<p><strong>Created on:</strong> {{ doc.created_at|date:"M d, Y" }}</p>
-<hr>
+  <hr class="doc-divider">
 
-<p>{{ doc.content }}</p>
+  <div class="doc-content">
+    <p>{{ doc.content }}</p>
+  </div>
 
-{% if attachments %}
-  <h4>Attachments:</h4>
-  {% for file in attachments %}
-    {% if file.is_pdf %}
-     <object data="{{ file.file.url }}" type="application/pdf" width="100%" height="500px">
-        <p>
-          <a href="{{ file.file.url }}" target="_blank">{{ file.file.name }}</a>
-        </p>
-    </object>
-    {% elif file.is_image %}
-      <img src="{{ file.file.url }}" alt="attachment" style="max-width:100%; margin-top:10px;">
-    {% else %}
-      <a href="{{ file.file.url }}" target="_blank">{{ file.file.name }}</a>
-    {% endif %}
-    {% if can_manage %}
-            <form method="POST" action="{% url 'xina:delete_attachment' file.id %}" 
-                  style="display: inline-block; margin-top: 5px;">
-                {% csrf_token %}
-                <button type="submit" class="btn-delete-attachment">
-                    Remove Attachment
-                </button>
-            </form>
-        {% endif %}
-  {% endfor %}
-{% endif %}
-{% if can_manage %}
-  <hr>
-  <form method="POST" action="{% url 'xina:delete' doc.id %}">
-    {% csrf_token %}
-    <button type="submit" >Delete Document</button>
-  </form>
-  <form method="POST" action="{% url 'xina:update' doc.id %}">
-    {% csrf_token %}
-    <button type="submit" >update</button>
-  </form>
-{% endif %}
+  {% if attachments %}
+  <div class="doc-attachments">
+    <h3>Attachments</h3>
+    <div class="attachment-list">
+      {% for file in attachments %}
+        <div class="attachment-item">
+          {% if file.is_pdf %}
+            <object data="{{ file.file.url }}" type="application/pdf" width="100%" height="500px" class="attachment-preview">
+              <p>
+                <a href="{{ file.file.url }}" target="_blank">{{ file.file.name }}</a>
+              </p>
+            </object>
+          {% elif file.is_image %}
+            <img src="{{ file.file.url }}" alt="attachment" class="attachment-image">
+          {% else %}
+            <a href="{{ file.file.url }}" target="_blank" class="attachment-link">{{ file.file.name }}</a>
+          {% endif %}
 
-<a href="{% url 'xina:main' %}">« Back to Documents</a>
+          {% if can_manage %}
+          <form method="POST" action="{% url 'xina:delete_attachment' file.id %}" class="delete-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Remove Attachment</button>
+          </form>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
 
+  {% if can_manage %}
+  <div class="doc-actions">
+    <form method="POST" action="{% url 'xina:delete' doc.id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-delete">Delete Document</button>
+    </form>
+
+    <form method="POST" action="{% url 'xina:update' doc.id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-edit">Update Document</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
 {% endblock %}
